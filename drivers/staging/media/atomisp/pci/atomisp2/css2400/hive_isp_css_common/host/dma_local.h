@@ -20,7 +20,11 @@
 
 #include <hrt/defs.h>				/* HRTCAT() */
 #include <hrt/bits.h>				/* _hrt_get_bits() */
+#ifdef ISP2401
+#include "../../css_2401_system/hrt/hive_isp_css_defs.h" /* HIVE_DMA_NUM_CHANNELS */
+#else
 #include <hive_isp_css_defs.h>		/* HIVE_DMA_NUM_CHANNELS */
+#endif
 #include <dma_v2_defs.h>
 
 #define _DMA_FSM_GROUP_CMD_IDX						_DMA_V2_FSM_GROUP_CMD_IDX

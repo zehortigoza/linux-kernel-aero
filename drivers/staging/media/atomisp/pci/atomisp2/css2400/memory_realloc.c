@@ -60,7 +60,12 @@ static bool realloc_isp_css_mm_buf(
 
 	IA_CSS_ENTER_PRIVATE("void");
 
-	if (ia_css_refcount_is_single(*curr_buf) && !force && *curr_size >= needed_size) {
+	if (!force && *curr_size >= needed_size) {
+		IA_CSS_LEAVE_PRIVATE("false");
+		return false;
+	}
+	/* don't reallocate if single ref to buffer and same size */
+	if (*curr_size == needed_size && ia_css_refcount_is_single(*curr_buf)) {
 		IA_CSS_LEAVE_PRIVATE("false");
 		return false;
 	}

@@ -27,7 +27,7 @@
 #include "hive_isp_css_irq_types_hrt.h"	/* enum	hrt_isp_css_irq */
 #elif defined(IS_ISP_2401_MAMOIADA_SYSTEM)
 /*#define CSS_RECEIVER testbench_isp_is_2400_inp_sys_csi_receiver*/
-#include "hive_isp_css_2401_irq_types_hrt.h"	/* enum	hrt_isp_css_irq */
+#include "../css_2401_system/hrt/hive_isp_css_2401_irq_types_hrt.h"	/* enum	hrt_isp_css_irq */
 #else
 #error "irq_global.h: 2400_SYSTEM must be one of {2400, 2401 }"
 #endif

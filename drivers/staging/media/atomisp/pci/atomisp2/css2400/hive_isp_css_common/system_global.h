@@ -15,7 +15,11 @@
 #ifndef __SYSTEM_GLOBAL_H_INCLUDED__
 #define __SYSTEM_GLOBAL_H_INCLUDED__
 
+#ifdef ISP2401
+#include "../css_2401_system/hrt/hive_isp_css_defs.h"
+#else
 #include <hive_isp_css_defs.h>
+#endif
 #include <type_support.h>
 
 /*

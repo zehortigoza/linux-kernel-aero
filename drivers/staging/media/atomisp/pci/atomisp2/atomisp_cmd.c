@@ -1078,19 +1078,9 @@ void atomisp_buf_done(struct atomisp_sub_device *asd, int error,
 					asd->params.offline_parm.num_captures,
 					asd->params.offline_parm.skip_frames,
 					asd->params.offline_parm.offset);
-#ifndef ISP2401
 			asd->pending_capture_request--;
 			dev_dbg(isp->dev, "Trigger capture again for new buffer. err=%d\n",
 				err);
-#else
-				asd->pending_capture_request--;
-				asd->re_trigger_capture = false;
-				dev_dbg(isp->dev, "Trigger capture again for new buffer. err=%d\n",
-						err);
-			} else {
-				asd->re_trigger_capture = true;
-			}
-#endif
 		}
 		break;
 	case CSS_BUFFER_TYPE_OUTPUT_FRAME:

@@ -20,7 +20,7 @@
 #if defined (HAS_ISP_2401_MAMOIADA)
 #define IS_ISP_2401_MAMOIADA
 
-#include "isp2401_mamoiada_params.h"
+#include "../css_2401_system/hrt/isp2401_mamoiada_params.h"
 #elif defined (HAS_ISP_2400_MAMOIADA)
 #define IS_ISP_2400_MAMOIADA
 

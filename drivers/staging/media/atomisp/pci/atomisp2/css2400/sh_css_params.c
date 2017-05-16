@@ -46,9 +46,7 @@
 #include "ia_css_pipeline.h"
 #include "ia_css_debug.h"
 #include "memory_access.h"
-#if 0   /* FIXME */
 #include "memory_realloc.h"
-#endif
 #include "ia_css_isp_param.h"
 #include "ia_css_isp_params.h"
 #include "ia_css_mipi.h"
@@ -2697,74 +2695,6 @@ ia_css_pipe_get_isp_config(struct ia_css_pipe *pipe,
 	IA_CSS_LEAVE("void");
 }
 
-#ifndef ISP2401
-/*
- * coding style says the return of "mmgr_NULL" is the error signal
- *
- * Deprecated: Implement mmgr_realloc()
- */
-static bool realloc_isp_css_mm_buf(
-	hrt_vaddress *curr_buf,
-	size_t *curr_size,
-	size_t needed_size,
-	bool force,
-	enum ia_css_err *err,
-	uint16_t mmgr_attribute)
-{
-	int32_t id;
-
-	*err = IA_CSS_SUCCESS;
-	/* Possible optimization: add a function sh_css_isp_css_mm_realloc()
-	 * and implement on top of hmm. */
-
-	IA_CSS_ENTER_PRIVATE("void");
-
-	if (!force && *curr_size >= needed_size) {
-		IA_CSS_LEAVE_PRIVATE("false");
-		return false;
-	}
-	/* don't reallocate if single ref to buffer and same size */
-	if (*curr_size == needed_size && ia_css_refcount_is_single(*curr_buf)) {
-		IA_CSS_LEAVE_PRIVATE("false");
-		return false;
-	}
-
-	id = IA_CSS_REFCOUNT_PARAM_BUFFER;
-	ia_css_refcount_decrement(id, *curr_buf);
-	*curr_buf = ia_css_refcount_increment(id, mmgr_alloc_attr(needed_size,
-							mmgr_attribute));
-
-	if (!*curr_buf) {
-		*err = IA_CSS_ERR_CANNOT_ALLOCATE_MEMORY;
-		*curr_size = 0;
-	} else {
-		*curr_size = needed_size;
-	}
-	IA_CSS_LEAVE_PRIVATE("true");
-	return true;
-}
-
-static bool reallocate_buffer(
-	hrt_vaddress *curr_buf,
-	size_t *curr_size,
-	size_t needed_size,
-	bool force,
-	enum ia_css_err *err)
-{
-	bool ret;
-	uint16_t	mmgr_attribute = MMGR_ATTRIBUTE_DEFAULT;
-
-	IA_CSS_ENTER_PRIVATE("void");
-
-	ret = realloc_isp_css_mm_buf(curr_buf,
-		curr_size, needed_size, force, err, mmgr_attribute);
-
-	IA_CSS_LEAVE_PRIVATE("ret=%d", ret);
-	return ret;
-}
-
-#endif
-
 struct ia_css_isp_3a_statistics *
 ia_css_isp_3a_statistics_allocate(const struct ia_css_3a_grid_info *grid)
 {
@@ -3128,9 +3058,6 @@ sh_css_init_isp_params_from_global(struct ia_css_stream *stream,
 
 		ia_css_sdis_clear_coefficients(&params->dvs_coefs);
 		params->dis_coef_table_changed = true;
-#ifdef ISP2401
-		ia_css_tnr3_set_default_config(&params->tnr3_config);
-#endif
 	}
 	else
 	{
@@ -3943,9 +3870,7 @@ sh_css_param_update_isp_params(struct ia_css_pipe *curr_pipe,
 			 */
 			g_param_buffer_enqueue_count++;
 			assert(g_param_buffer_enqueue_count < g_param_buffer_dequeue_count+50);
-#ifdef ISP2401
-			ia_css_save_latest_paramset_ptr(pipe, cpy);
-#endif
+
 			/*
 			 * Tell the SP which queues are not empty,
 			 * by sending the software event.
