@@ -29,7 +29,7 @@ config VIDEO_GC2235
 
 config VIDEO_OV8858
        tristate "Omnivision ov8858 sensor support"
-       depends on I2C && VIDEO_V4L2 && VIDEO_ATOMISP
+       depends on I2C && VIDEO_V4L2 && VIDEO_ATOMISP && VIDEO_IMX
        ---help---
          This is a Video4Linux2 sensor-level driver for the Omnivision
          ov8858 RAW sensor.
