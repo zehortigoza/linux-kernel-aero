@@ -89,6 +89,19 @@ config VIDEO_OV2680
 
          It currently only works with the atomisp driver.
 
+config VIDEO_OV7251
+       tristate "OmniVision OV7251 sensor support"
+       depends on I2C && VIDEO_V4L2
+       default y
+       ---help---
+         This is a Video4Linux2 sensor-level driver for the OmniVision
+         OV7251 camera.
+
+         To compile this driver as a module, choose M here: the
+         module will be called ov7251.
+
+         It currently only works with atomisp driver.
+
 #
 # Kconfig for flash drivers
 #

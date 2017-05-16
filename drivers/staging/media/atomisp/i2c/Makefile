@@ -9,6 +9,7 @@ obj-$(CONFIG_VIDEO_GC2235)     += gc2235.o
 obj-$(CONFIG_VIDEO_OV2722)     += ov2722.o
 obj-$(CONFIG_VIDEO_OV2680)     += ov2680.o
 obj-$(CONFIG_VIDEO_GC0310)     += gc0310.o
+obj-$(CONFIG_VIDEO_OV7251)     += ov7251.o
 
 obj-$(CONFIG_VIDEO_MSRLIST_HELPER) += libmsrlisthelper.o
 
