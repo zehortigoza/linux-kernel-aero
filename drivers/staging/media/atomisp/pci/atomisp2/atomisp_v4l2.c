@@ -1082,7 +1082,11 @@ atomisp_load_firmware(struct atomisp_device *isp)
 {
 	const struct firmware *fw;
 	int rc;
-	char *fw_path = NULL;
+	/*
+	 * Intel Aero ships with this firmware, the version check bellow fails
+	 * so hardcoding here
+	 */
+	char *fw_path = "shisp_2401a0_v21.bin";
 
 	if (skip_fwload)
 		return NULL;
