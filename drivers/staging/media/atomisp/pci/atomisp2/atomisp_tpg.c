@@ -169,9 +169,9 @@ int atomisp_tpg_init(struct atomisp_device *isp)
 	v4l2_set_subdevdata(sd, tpg);
 
 	pads[0].flags = MEDIA_PAD_FL_SINK;
-	me->function = MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN;
+	me->type = MEDIA_ENT_T_V4L2_SUBDEV;
 
-	ret = media_entity_pads_init(me, 1, pads);
+	ret = media_entity_init(me, 1, pads, 0);
 	if (ret < 0)
 		goto fail;
 	return 0;

@@ -203,14 +203,14 @@ static int csi2_link_setup(struct media_entity *entity,
 {
 	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
 	struct atomisp_mipi_csi2_device *csi2 = v4l2_get_subdevdata(sd);
-	u32 result = local->index | is_media_entity_v4l2_subdev(remote->entity);
+	u32 result = local->index | media_entity_type(remote->entity);
 
 	switch (result) {
-	case CSI2_PAD_SOURCE | MEDIA_ENT_F_OLD_BASE:
+	case CSI2_PAD_SOURCE | MEDIA_ENT_T_DEVNODE:
 		/* not supported yet */
 		return -EINVAL;
 
-	case CSI2_PAD_SOURCE | MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN:
+	case CSI2_PAD_SOURCE | MEDIA_ENT_T_V4L2_SUBDEV:
 		if (flags & MEDIA_LNK_FL_ENABLED) {
 			if (csi2->output & ~CSI2_OUTPUT_ISP_SUBDEV)
 				return -EBUSY;
@@ -256,8 +256,8 @@ static int mipi_csi2_init_entities(struct atomisp_mipi_csi2_device *csi2,
 	pads[CSI2_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
 
 	me->ops = &csi2_media_ops;
-	me->function = MEDIA_ENT_F_V4L2_SUBDEV_UNKNOWN;
-	ret = media_entity_pads_init(me, CSI2_PADS_NUM, pads);
+	me->type = MEDIA_ENT_T_V4L2_SUBDEV;
+	ret = media_entity_init(me, CSI2_PADS_NUM, pads, 0);
 	if (ret < 0)
 		return ret;
 

@@ -38,10 +38,7 @@
 #include <linux/errno.h>
 #include <linux/io.h>
 #include <asm/current.h>
-#include <linux/sched/signal.h>
 #include <linux/file.h>
-
-#include <asm/set_memory.h>
 
 #include "atomisp_internal.h"
 #include "hmm/hmm_common.h"
@@ -1030,8 +1027,8 @@ static int alloc_user_pages(struct hmm_buffer_object *bo,
 		/*Handle frame buffer allocated in user space*/
 		mutex_unlock(&bo->mutex);
 		down_read(&current->mm->mmap_sem);
-		page_nr = get_user_pages((unsigned long)userptr,
-					 (int)(bo->pgnr), 1, pages, NULL);
+		page_nr = get_user_pages(current, current->mm, (unsigned long)userptr,
+					 (int)(bo->pgnr), 1, 0, pages, NULL);
 		up_read(&current->mm->mmap_sem);
 		mutex_lock(&bo->mutex);
 		bo->mem_type = HMM_BO_MEM_TYPE_USER;

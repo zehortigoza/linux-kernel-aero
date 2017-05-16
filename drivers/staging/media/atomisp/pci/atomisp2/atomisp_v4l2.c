@@ -134,7 +134,7 @@ int atomisp_video_init(struct atomisp_video_pipe *video, const char *name)
 		return -EINVAL;
 	}
 
-	ret = media_entity_pads_init(&video->vdev.entity, 1, &video->pad);
+	ret = media_entity_init(&video->vdev.entity, 1, &video->pad, 0);
 	if (ret < 0)
 		return ret;
 
@@ -888,7 +888,12 @@ static int atomisp_register_entities(struct atomisp_device *isp)
 	strlcpy(isp->media_dev.model, "Intel Atom ISP",
 		sizeof(isp->media_dev.model));
 
-	media_device_init(&isp->media_dev);
+	ret = media_device_register(&isp->media_dev);
+	if (ret < 0) {
+		dev_err(isp->dev, "%s: V4L2 device registration failed (%d)\n",
+			__func__, ret);
+		goto v4l2_device_failed;
+	}
 	isp->v4l2_dev.mdev = &isp->media_dev;
 	ret = v4l2_device_register(isp->dev, &isp->v4l2_dev);
 	if (ret < 0) {
@@ -1020,7 +1025,6 @@ csi_and_subdev_probe_failed:
 	v4l2_device_unregister(&isp->v4l2_dev);
 v4l2_device_failed:
 	media_device_unregister(&isp->media_dev);
-    media_device_cleanup(&isp->media_dev);
 	return ret;
 }
 
@@ -1431,9 +1435,6 @@ static int atomisp_pci_probe(struct pci_dev *dev,
 			err);
 		goto register_entities_fail;
 	}
-	err = atomisp_create_pads_links(isp);
-	if (err < 0)
-		goto register_entities_fail;
 	/* init atomisp wdts */
 	if (init_atomisp_wdts(isp) != 0)
 		goto wdt_work_queue_fail;
