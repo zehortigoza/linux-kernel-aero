@@ -1759,7 +1759,6 @@ static int ov8858_s_ctrl(struct v4l2_ctrl *ctrl)
 	struct ov8858_device *dev = container_of(
 		ctrl->handler, struct ov8858_device, ctrl_handler);
 	struct i2c_client *client = v4l2_get_subdevdata(&dev->sd);
-	int ret = 0;
 
 	/* input_lock is taken by the control framework, so it
 	 * doesn't need to be taken here.
@@ -1785,31 +1784,29 @@ static int ov8858_s_ctrl(struct v4l2_ctrl *ctrl)
 		dev->fmt_idx = 0;
 		dev->fps_index = 0;
 
-		break;
+		return 0;
 	case V4L2_CID_FOCUS_ABSOLUTE:
 		if (dev->vcm_driver && dev->vcm_driver->t_focus_abs)
-			ret = dev->vcm_driver->t_focus_abs(&dev->sd,
+			return dev->vcm_driver->t_focus_abs(&dev->sd,
 							    ctrl->val);
-		break;
+		return 0;
 	case V4L2_CID_EXPOSURE_AUTO_PRIORITY:
 		if (ctrl->val == V4L2_EXPOSURE_AUTO)
 			dev->limit_exposure_flag = false;
 		else if (ctrl->val == V4L2_EXPOSURE_APERTURE_PRIORITY)
 			dev->limit_exposure_flag = true;
-		break;
+		return 0;
 	case V4L2_CID_HFLIP:
 		dev->hflip = ctrl->val;
-		break;
+		return 0;
 	case V4L2_CID_VFLIP:
 		dev->vflip = ctrl->val;
-		break;
+		return 0;
 	default:
 		dev_err(&client->dev, "%s: Error: Invalid ctrl: 0x%X\n",
 			__func__, ctrl->id);
-		ret = -EINVAL;
+		return -EINVAL;
 	}
-
-	return ret;
 }
 
 static int ov8858_g_ctrl(struct v4l2_ctrl *ctrl)
