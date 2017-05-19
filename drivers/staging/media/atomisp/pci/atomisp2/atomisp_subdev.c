@@ -132,6 +132,18 @@ bool atomisp_subdev_format_conversion(struct atomisp_sub_device *asd,
 
 uint16_t atomisp_subdev_source_pad(struct video_device * vdev)
 {
+	if (!vdev) {
+		printk("atomisp_subdev_source_pad() !vdev");
+		return 0;
+	}
+	if (!vdev->entity.links) {
+		printk("atomisp_subdev_source_pad() !vdev->entity.links");
+		return 0;
+	}
+	if (!vdev->entity.links[0].source) {
+		printk("atomisp_subdev_source_pad() !vdev->entity.links[0].source");
+		return 0;
+	}
 	return vdev->entity.links[0].source->index;
 }
 

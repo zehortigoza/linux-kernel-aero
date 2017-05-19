@@ -945,6 +945,7 @@ static int atomisp_release(struct file *file)
 	if (pipe->users)
 		goto done;
 
+	dev_warn(isp->dev, "before __atomisp_reqbufs() vdev->name=%s", vdev->name);
 	if (__atomisp_reqbufs(file, NULL, &req)) {
 		dev_err(isp->dev,
 			"atomisp_reqbufs failed on release, driver bug");

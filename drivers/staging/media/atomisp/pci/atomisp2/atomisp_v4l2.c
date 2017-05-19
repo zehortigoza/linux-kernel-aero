@@ -1004,7 +1004,7 @@ static int atomisp_register_entities(struct atomisp_device *isp)
 	if (ret < 0)
 		goto link_failed;
 
-	return media_device_register(&isp->media_dev);
+	return ret;
 
 link_failed:
 	for (i = 0; i < isp->num_of_streams; i++)

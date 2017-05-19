@@ -1042,14 +1042,23 @@ int __atomisp_reqbufs(struct file *file, void *fh,
 	struct v4l2_requestbuffers *req)
 {
 	struct video_device *vdev = video_devdata(file);
-	struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
-	struct atomisp_sub_device *asd = pipe->asd;
+	struct atomisp_video_pipe *pipe;
+	struct atomisp_sub_device *asd;
 	struct atomisp_css_frame_info frame_info;
 	struct atomisp_css_frame *frame;
 	struct videobuf_vmalloc_memory *vm_mem;
-	uint16_t source_pad = atomisp_subdev_source_pad(vdev);
-	uint16_t stream_id = atomisp_source_pad_to_stream_id(asd, source_pad);
+	uint16_t source_pad;
+	uint16_t stream_id;
 	int ret = 0, i = 0;
+
+	if (!vdev) {
+		printk("__atomisp_reqbufs() !vdev");
+		return -1;
+	}
+	pipe = atomisp_to_video_pipe(vdev);
+	asd = pipe->asd;
+	source_pad = atomisp_subdev_source_pad(vdev);
+	stream_id = atomisp_source_pad_to_stream_id(asd, source_pad);
 
 	if (req->count == 0) {
 		mutex_lock(&pipe->capq.vb_lock);

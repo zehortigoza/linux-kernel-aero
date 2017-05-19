@@ -26,10 +26,10 @@ atomisp-objs += \
 	css2400/runtime/debug/src/ia_css_debug.o \
 	css2400/runtime/event/src/event.o \
 	css2400/sh_css_sp.o \
-	css2400/css_2400_system/spmem_dump.o \
-	css2400/css_2400_system/hive_isp_css_2400_system_generated/ia_css_isp_states.o \
-	css2400/css_2400_system/hive_isp_css_2400_system_generated/ia_css_isp_configs.o \
-	css2400/css_2400_system/hive_isp_css_2400_system_generated/ia_css_isp_params.o \
+	css2400/css_2401_system/spmem_dump.o \
+	css2400/css_2401_system/hive_isp_css_2401_system_generated/ia_css_isp_states.o \
+	css2400/css_2401_system/hive_isp_css_2401_system_generated/ia_css_isp_configs.o \
+	css2400/css_2401_system/hive_isp_css_2401_system_generated/ia_css_isp_params.o \
 	css2400/sh_css_stream_format.o \
 	css2400/sh_css_hrt.o \
 	css2400/sh_css_properties.o \
@@ -200,9 +200,9 @@ INCLUDES += \
 	-I$(atomisp)/css2400/base/refcount/interface/ \
 	-I$(atomisp)/css2400/camera/pipe/interface/ \
 	-I$(atomisp)/css2400/camera/util/interface/ \
-	-I$(atomisp)/css2400/css_2400_system/ \
-	-I$(atomisp)/css2400/css_2400_system/hive_isp_css_2400_system_generated/ \
-	-I$(atomisp)/css2400/css_2400_system/hrt/ \
+	-I$(atomisp)/css2400/css_2401_system/ \
+	-I$(atomisp)/css2400/css_2401_system/hive_isp_css_2401_system_generated/ \
+	-I$(atomisp)/css2400/css_2401_system/hrt/ \
 	-I$(atomisp)/css2400/hive_isp_css_common/ \
 	-I$(atomisp)/css2400/hive_isp_css_common/host/ \
 	-I$(atomisp)/css2400/hive_isp_css_include/ \
@@ -341,6 +341,7 @@ INCLUDES += -I$(srctree)/drivers/staging/android/ion
 endif
 
 DEFINES := -DHRT_HW -DHRT_ISP_CSS_CUSTOM_HOST -DHRT_USE_VIR_ADDRS -D__HOST__
+#DEFINES += -DHRT_KERNEL
 #DEFINES += -DUSE_DYNAMIC_BIN
 #DEFINES += -DISP_POWER_GATING
 #DEFINES += -DUSE_INTERRUPTS
@@ -348,9 +349,12 @@ DEFINES := -DHRT_HW -DHRT_ISP_CSS_CUSTOM_HOST -DHRT_USE_VIR_ADDRS -D__HOST__
 #DEFINES += -DPUNIT_CAMERA_BUSY
 #DEFINES += -DUSE_KMEM_CACHE
 
-#DEFINES += -DATOMISP_POSTFIX=\"css2400b0_v21\" -DISP2400B0
 DEFINES += -DSYSTEM_hive_isp_css_2401_system -DISP2401
 DEFINES += -DISP2401_NEW_INPUT_SYSTEM
+
+MY_CFLAGS = -g -DDEBUG
+ccflags-y += ${MY_CFLAGS}
+CC += ${MY_CFLAGS}
 
 ccflags-y += $(INCLUDES) $(DEFINES) -fno-common -Werror
 
